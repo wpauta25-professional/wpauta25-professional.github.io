@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CPA Roadmap — Wilson Pauta Jr.</title>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --gold: #c9a84c;
+      --gold-dim: rgba(201,168,76,0.15);
+      --gold-line: rgba(201,168,76,0.25);
+      --bg: #0b0b0b;
+      --surface: #111;
+      --text: #e8e3d8;
+      --muted: #7a7568;
+      --accent-red: #c0392b;
+      --accent-teal: #1a8a78;
+      --accent-purple: #7d5fa0;
+      --accent-green: #2e8b57;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'EB Garamond', Georgia, serif;
+      font-size: 18px;
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    /* ── RULED PAPER TEXTURE ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 31px,
+          rgba(201,168,76,0.04) 31px,
+          rgba(201,168,76,0.04) 32px
+        );
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(11,11,11,0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--gold-line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 32px;
+    }
+
+    nav a.back {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: var(--gold);
+      text-decoration: none;
+      text-transform: uppercase;
+      opacity: 0.8;
+      transition: opacity 0.2s;
+    }
+    nav a.back:hover { opacity: 1; }
+
+    nav .nav-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    /* ── TABS ── */
+    .tab-bar {
+      display: flex;
+      border-bottom: 1px solid var(--gold-line);
+      background: rgba(11,11,11,0.98);
+      position: sticky;
+      top: 53px;
+      z-index: 99;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 14px 8px;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--muted);
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .tab-btn.active {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+    }
+    .tab-btn:hover { color: var(--text); }
+
+    /* ── PANELS ── */
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      z-index: 1;
+      padding: 64px 32px 48px;
+      text-align: center;
+      border-bottom: 1px solid var(--gold-line);
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(201,168,76,0.04) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 4px;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      display: inline-block;
+      border: 1px solid var(--gold-line);
+      padding: 5px 16px;
+    }
+
+    .hero h1 {
+      font-size: clamp(28px, 6vw, 52px);
+      font-weight: 400;
+      letter-spacing: -0.5px;
+      margin-bottom: 12px;
+      line-height: 1.15;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .hero-sub {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 2px;
+      margin-bottom: 36px;
+    }
+
+    /* Milestone badges */
+    .milestones {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .milestone {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      padding: 7px 14px;
+      border: 1px solid var(--gold-line);
+      background: var(--gold-dim);
+      letter-spacing: 1px;
+    }
+
+    .milestone .status { color: var(--gold); margin-right: 8px; }
+    .milestone .label { color: #aaa; }
+
+    /* ── CONTAINER ── */
+    .container {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── SECTION HEADING ── */
+    .section-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 3px;
+      color: var(--gold);
+      text-transform: uppercase;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--gold-line);
+      margin-bottom: 20px;
+    }
+
+    /* ── MISSION PANEL ── */
+    .mission-block {
+      margin-bottom: 36px;
+    }
+
+    .mission-block p {
+      color: #c8c3ba;
+      font-size: 17px;
+      line-height: 1.8;
+    }
+
+    .mission-block blockquote {
+      font-size: 20px;
+      font-style: italic;
+      color: var(--text);
+      border-left: 3px solid var(--gold);
+      padding-left: 20px;
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    .kiyosaki-grid {
+      display: grid;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .kiyosaki-row {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      background: rgba(201,168,76,0.05);
+      border: 1px solid var(--gold-line);
+      padding: 14px 16px;
+    }
+
+    .kiyosaki-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      color: var(--gold);
+      min-width: 28px;
+      font-weight: 700;
+      padding-top: 2px;
+    }
+
+    .kiyosaki-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 3px;
+    }
+
+    .kiyosaki-desc {
+      font-size: 13px;
+      color: var(--muted);
+      font-family: 'Space Mono', monospace;
+      line-height: 1.5;
+    }
+
+    /* ── PATHWAY PANEL ── */
+    .pathway-note {
+      background: rgba(201,168,76,0.06);
+      border: 1px solid var(--gold-line);
+      padding: 18px 20px;
+      margin-bottom: 28px;
+      font-size: 15px;
+      color: #b8b3aa;
+      line-height: 1.8;
+    }
+
+    .step-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .step {
+      display: flex;
+      gap: 18px;
+      padding: 16px 18px;
+      border: 1px solid rgba(255,255,255,0.06);
+      transition: border-color 0.2s;
+    }
+    .step.done   { border-left: 3px solid var(--accent-green); background: rgba(46,139,87,0.04); }
+    .step.active { border-left: 3px solid var(--gold); background: rgba(201,168,76,0.04); }
+    .step.pending{ border-left: 3px solid #333; }
+
+    .step-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 22px;
+      color: #333;
+      min-width: 32px;
+      line-height: 1;
+    }
+    .step.done   .step-num { color: var(--accent-green); }
+    .step.active .step-num { color: var(--gold); }
+
+    .step-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 5px;
+      color: var(--text);
+    }
+    .step.pending .step-title { color: #666; }
+
+    .step-detail {
+      font-size: 13px;
+      color: var(--muted);
+      font-family: 'Space Mono', monospace;
+      line-height: 1.6;
+    }
+
+    /* ── SPRINTS PANEL ── */
+    .legend {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 1px;
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+    }
+
+    /* Sprint cards */
+    .sprint-list { display: grid; gap: 10px; }
+
+    .sprint {
+      border: 1px solid rgba(255,255,255,0.07);
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+
+    .sprint-header {
+      width: 100%;
+      background: #111;
+      border: none;
+      padding: 18px 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      text-align: left;
+      transition: background 0.2s;
+    }
+    .sprint-header:hover { background: #161616; }
+    .sprint.open .sprint-header { background: #161616; }
+
+    .sprint-meta {
+      min-width: 50px;
+    }
+
+    .sprint-id {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 1px;
+      margin-bottom: 3px;
+    }
+
+    .sprint-type {
+      font-family: 'Space Mono', monospace;
+      font-size: 8px;
+      letter-spacing: 1px;
+    }
+
+    .sprint-info { flex: 1; }
+
+    .sprint-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 3px;
+      font-family: 'EB Garamond', serif;
+    }
+
+    .sprint-time {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.5px;
+    }
+
+    .sprint-toggle {
+      font-size: 20px;
+      line-height: 1;
+      color: var(--muted);
+      min-width: 20px;
+      text-align: center;
+      transition: transform 0.25s;
+    }
+    .sprint.open .sprint-toggle { transform: rotate(45deg); }
+
+    /* Sprint body */
+    .sprint-body {
+      display: none;
+      padding: 20px 20px 24px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+    .sprint.open .sprint-body { display: block; }
+
+    .sprint-row {
+      margin-bottom: 18px;
+    }
+
+    .sprint-row-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 8px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      opacity: 0.7;
+    }
+
+    .sprint-row p {
+      font-size: 15px;
+      color: #c0bbb3;
+      line-height: 1.75;
+    }
+
+    .sprint-row ol {
+      padding-left: 20px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .sprint-row li {
+      font-size: 14px;
+      color: #a8a39b;
+      line-height: 1.65;
+      font-family: 'Space Mono', monospace;
+    }
+
+    .kiyosaki-note {
+      margin-top: 18px;
+      padding: 12px 16px;
+      border-left: 2px solid currentColor;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      line-height: 1.6;
+      color: #777;
+      font-style: normal;
+    }
+
+    /* ── TIMELINE ── */
+    .timeline {
+      margin-top: 36px;
+      padding: 22px;
+      background: rgba(201,168,76,0.04);
+      border: 1px solid var(--gold-line);
+    }
+
+    .timeline-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 3px;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .timeline-row {
+      display: flex;
+      gap: 16px;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      align-items: baseline;
+    }
+    .timeline-row:last-child { border-bottom: none; }
+
+    .timeline-time {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--gold);
+      min-width: 120px;
+      flex-shrink: 0;
+    }
+
+    .timeline-event {
+      font-size: 13px;
+      color: #888;
+      font-family: 'Space Mono', monospace;
+    }
+
+    /* ── PHASE COLORS ── */
+    .phase-foundation { --phase-color: #c9a84c; }
+    .phase-core       { --phase-color: #c0392b; }
+    .phase-discipline { --phase-color: #1a8a78; }
+    .phase-experience { --phase-color: #7d5fa0; }
+    .phase-licensure  { --phase-color: #2e8b57; }
+
+    .sprint { border-left: 3px solid var(--phase-color, #333); }
+    .sprint.open { border-color: var(--phase-color, #555); }
+    .sprint-id { color: var(--phase-color, #888); }
+    .sprint-type { color: var(--phase-color, #888); }
+    .sprint-row-label { color: var(--phase-color, #888); }
+    .kiyosaki-note { color: color-mix(in srgb, var(--phase-color, #555) 60%, #555); border-color: var(--phase-color, #555); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      nav { padding: 12px 16px; }
+      .hero { padding: 48px 16px 36px; }
+      .container { padding: 28px 16px 60px; }
+      .timeline-time { min-width: 90px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="back">← Portfolio</a>
+  <span class="nav-label">CPA Roadmap</span>
+  <span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);">Wilson Pauta Jr.</span>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">Bullet Journal Method · Goal Deconstruction</div>
+  <h1>CPA Licensure <em>Roadmap</em></h1>
+  <p class="hero-sub">New York State · 2025 – 2027 · Wilson Pauta Jr.</p>
+  <div class="milestones">
+    <div class="milestone"><span class="status">✓ Complete</span><span class="label">Education</span></div>
+    <div class="milestone"><span class="status">→ Active</span><span class="label">NASBA Registration</span></div>
+    <div class="milestone"><span class="status">→ Active</span><span class="label">CPA Exam (4 Sections)</span></div>
+    <div class="milestone"><span class="status">◯ Pending</span><span class="label">2yr Experience</span></div>
+    <div class="milestone"><span class="status">◯ Pending</span><span class="label">License</span></div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="switchTab('sprints', this)">Sprint Plan</button>
+  <button class="tab-btn" onclick="switchTab('mission', this)">The Mission</button>
+  <button class="tab-btn" onclick="switchTab('pathway', this)">NY Pathway</button>
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- SPRINT PANEL -->
+<!-- ══════════════════════════════════════ -->
+<div class="panel active" id="panel-sprints">
+  <div class="container">
+
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-dot" style="background:#c9a84c;"></div>SHORT-TERM SPRINT
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:#c0392b;"></div>LONG-TERM SPRINT
+      </div>
+    </div>
+
+    <div class="sprint-list">
+
+      <!-- S0 -->
+      <div class="sprint phase-foundation" id="s0">
+        <button class="sprint-header" onclick="toggleSprint('s0')">
+          <div class="sprint-meta">
+            <div class="sprint-id">SPRINT 0</div>
+            <div class="sprint-type">SHORT-TERM</div>
+          </div>
+          <div class="sprint-info">
+            <div class="sprint-title">Intelligence Gathering &amp; Setup</div>
+            <div class="sprint-time">Weeks 1–3 · Low energy required</div>
+          </div>
+          <div class="sprint-toggle">+</div>
+        </button>
+        <div class="sprint-body">
+          <div class="sprint-row">
+            <div class="sprint-row-label">What I Want</div>
+            <p>Know exactly where I stand and build the infrastructure for the journey — before spending a dollar on review materials.</p>
+          </div>
+          <div class="sprint-row">
+            <div class="sprint-row-label">What It Does</div>
+            <p>Eliminates guesswork. You don't waste months studying the wrong thing or miss a registration window that sets back your timeline by a quarter.</p>
+          </div>
+          <div class="sprint-row">
+            <div class="sprint-row-label">How to Achieve It</div>
+            <ol>
+              <li>Register on NASBA's CPA Central portal — create your candidate account at nasba.org</li>
+              <li>Apply to NY State Board of Accountancy via NYSED (op.nysed.gov) — submit transcripts for credit verification</li>
+              <li>Choose your Discipline section: given Real Estate + advisory interest → BAR (Business Analysis &amp; Reporting) or TCP (Tax Compliance &amp; Planning) for client-facing tax work</li>
+              <li>Select a review course: Becker (most comprehensive, ~$1,500–$2,000), Roger/UWorld (high-energy lectures), or Ninja (budget-friendly ~$600)</li>
+              <li>Set up your Bullet Journal CPA spread: one page per section, tracking MCQ scores, study hours, and weak topics weekly</li>
+            </ol>
+          </div>
+          <div class="kiyosaki-note">💡 Financial IQ #5 — Improving Your Financial Information. You can't act on data you haven't gathered. This sprint is pure intelligence work.</div>
+        </div>
+      </div>
+
+      <!-- S1 -->
+      <div class="sprint phase-core" id="s1">
+        <button class="sprint-header" onclick="toggleSprint('s1')">
+          <div class="sprint-meta">
+            <div class="sprint-id">SPRINT 1</div>
+            <div class="sprint-type">LONG-TERM</div>
+          </div>
+          <div class="sprint-info">
+            <div class="sprint-title">FAR — Financial Accounting &amp; Reporting</div>
+            <div class="sprint-time">Months 1–3 · High energy, deep focus</div>
+          </div>
+          <div class="sprint-toggle">+</div>
+        </button>
+        <div class="sprint-body">
+          <div class="sprint-row">
+            <div class="sprint-row-label">What I Want</div>
+            <p>Pass the hardest CPA section first, while my accounting coursework from UAlbany is still fresh in memory.</p>
+          </div>
+          <div class="sprint-row">
+            <div class="sprint-row-label">What It Does</div>
+            <p>FAR covers GAAP, financial statements, governmental accounting, and nonprofits — the backbone of financial literacy. Passing it first builds maximum confidence and eliminates the heaviest lift early. Your 30-month rolling clock to pass all 4 sections starts here.</p>
+          </div>
+          <div class="sprint-row">
+            <div class="sprint-row-label">How to Achieve It</div>
+            <ol>
+              <li>Study 15–20 hrs/week. Break into 4 modules: Financial Statements, Governmental, Nonprofit, Conceptual Framework</li>
+              <li>Use your review course's adaptive QBank — minimum 30 MCQs per day. Log weak topics weekly in BuJo</li>
+              <li>Introduce Task-Based Simulations (TBSs) at Week 6 — simulate real exam conditions under time pressure</li>
+              <li>Target: consistently scoring 70–75%+ on practice exams before scheduling the real test</li>
+              <li>Schedule at a Prometric center (Albany or NYC). Minimum passing score: 75 out of 99</li>
+            </ol>
+          </div>
+          <div class="kiyosaki-note">💡 Financial IQ #1 — Making More Money. FAR is the language of financial reporting — the foundation of reading any business's financial health and the first real credentialing milestone.</div>
+        </div>
+      </div>
+
+      <!-- S2 -->
+      <div class="sprint phase-core" id="s2">
+        <button class="sprint-header" onclick="toggleSprint('s2')">
+          <div class="sprint-meta">
+            <div class="sprint-id">SPRINT 2</div>
+            <div class="sprint-type">LONG-TERM</div>
+          </div>
+          <div class="sprint-info">
+            <div class="sprint-title">AUD — Auditing &amp; Attestation</div>
+            <div class="sprint-time">Months 3–5 · High energy</div>
+          </div>
+          <div class="sprint-toggle">+</div>
+        </button>
+        <div class="sprint-body">
+          <div class="sprint-row">
+            <div class="sprint-row-label">What I Want</div>
+            <p>Pass AUD to prove professional-grade skepticism and process thinking — the mindset of someone who verifies before trusting.</p>
+          </div>
+          <div class="sprint-row">
+            <div class="sprint-row-label">What It Does</div>
+            <p>AUD tests risk assessment, internal controls evaluation, and ethics — directly applicable to Caceres Agency when advising small businesses on financial systems and controls. This is the section that makes you trustworthy to clients.</p>
+          </div>
+          <div class="sprint-row">
+            <div class="sprint-row-label">How to Achieve It</div>
+            <ol>
+              <li>Study 12–16 hrs/week. Modules: Ethics &amp; Responsibilities, Risk Assessment, Audit Procedures, Reporting</li>
+              <li>AUD is logic-heavy — for every MCQ you get wrong, write why in your BuJo (not just what the answer was)</li>
+              <li>Practice the auditor's mindset: What could go wrong? Who is responsible? What evidence exists?</li>
+              <li>Pair with any ISC discipline prep if that's your chosen section (overlapping SOC/attestation content)</li>
+              <li>Schedule within 60 days of passing FAR to maintain momentum and protect your 30-month window</li>
+            </ol>
+          </div>
+          <div class="kiyosaki-note">💡 Financial IQ #2 — Protecting Your Money. AUD teaches how money is verified and safeguarded — essential for any investor or business owner advising clients on financial integrity.</div>
+        </div>
+      </div>
+
+      <!-- S3 -->
+      <div class="sprint phase-core" id="s3">
+        <button class="sprint-header" onclick="toggleSprint('s3')">
+          <div class="sprint-meta">
+            <div class="sprint-id">SPRINT 3</div>
+            <div class="sprint-type">LONG-TERM</div>
+          </div>
+          <div class="sprint-info">
+            <div class="sprint-title">REG — Taxation &amp; Regulation</div>
+            <div class="sprint-time">Months 5–7 · High energy, high relevance</div>
+          </div>
+          <div class="sprint-toggle">+</div>
+        </button>
+        <div class="sprint-body">
+          <div class="sprint-row">
+            <div class="sprint-row-label">What I Want</div>
+            <p>Pass REG to command the tax code — the single most immediately useful section for real life, Caceres Agency, and real estate investing.</p>
+          </div>
+          <div class="sprint-row">
+            <div class="sprint-row-label">What It Does</div>
+            <p>REG covers federal individual and entity taxation, business law, and ethics. It directly powers your ability to structure LLCs, advise small business clients on tax strategy, and plan real estate investments in NYC and Paute intelligently.</p>
+          </div>
+          <div class="sprint-row">
+            <div class="sprint-row-label">How to Achieve It</div>
+            <ol>
+              <li>Study 12–16 hrs/week. Modules: Individual Tax, Entity Tax (S-Corps, Partnerships, LLCs), Business Law, Ethics</li>
+              <li>Note: New federal tax provisions may become testable on REG — confirm with your review course that materials are current for your exam window</li>
+              <li>Connect every concept to real life: map each rule back to Caceres Agency's LLC structure or a real estate deal scenario</li>
+              <li>Use REG and TCP overlap strategically — study individual taxation content that appears in both sections</li>
+              <li>Target: Pass REG by Month 7. Three cores complete. Rolling window fully engaged.</li>
+            </ol>
+          </div>
+          <div class="kiyosaki-note">💡 Financial IQ #3 &amp; #4 — Budgeting + Leveraging Money. REG is where you learn how the wealthy use the tax code as a wealth-building tool, not just a compliance obligation.</div>
+        </div>
+      </div>
+
+      <!-- S4 -->
+      <div class="sprint phase-discipline" id="s4">
+        <button class="sprint-header" onclick="toggleSprint('s4')">
+          <div class="sprint-meta">
+            <div class="sprint-id">SPRINT 4</div>
+            <div class="sprint-type">LONG-TERM</div>
+          </div>
+          <div class="sprint-info">
+            <div class="sprint-title">BAR or TCP — Your Discipline Section</div>
+            <div class="sprint-time">Months 7–9 · Moderate energy — choose your weapon</div>
+          </div>
+          <div class="sprint-toggle">+</div>
+        </button>
+        <div class="sprint-body">
+          <div class="sprint-row">
+            <div class="sprint-row-label">What I Want</div>
+            <p>Choose and pass the discipline section that sharpens my entrepreneurial edge — the section that defines my specialty.</p>
+          </div>
+          <div class="sprint-row">
+            <div class="sprint-row-label">What It Does</div>
+            <p>BAR (Business Analysis &amp; Reporting) aligns with financial statement analysis and advisory — ideal for consulting and operations. TCP (Tax Compliance &amp; Planning) deepens tax mastery for real estate structuring and small business clients. Both are legitimate; the choice is about your first client and first role.</p>
+          </div>
+          <div class="sprint-row">
+            <div class="sprint-row-label">How to Achieve It</div>
+            <ol>
+              <li>Decision framework: if your first year trends toward finance/operations → BAR. If Caceres Agency's first clients are tax-adjacent or you're structuring Ecuador/NYC real estate → TCP</li>
+              <li>Discipline sections are only offered quarterly (Jan, Apr, Jul, Oct) — plan your schedule at the start of this sprint</li>
+              <li>BAR content builds directly on FAR. TCP content builds directly on REG. Use overlap to compress study time.</li>
+              <li>Study 10–14 hrs/week — this should feel lighter than the cores. Build on existing knowledge, don't start over.</li>
+              <li>Pass within your 30-month rolling window from your FAR pass date. You are now EXAM COMPLETE.</li>
+            </ol>
+          </div>
+          <div class="kiyosaki-note">💡 Financial IQ #4 — Leveraging Money. The discipline section is where CPA knowledge becomes advisory power — the difference between doing the numbers and directing the strategy.</div>
+        </div>
+      </div>
+
+      <!-- S5 -->
+      <div class="sprint phase-experience" id="s5">
+        <button class="sprint-header" onclick="toggleSprint('s5')">
+          <div class="sprint-meta">
+            <div class="sprint-id">SPRINT 5</div>
+            <div class="sprint-type">LONG-TERM</div>
+          </div>
+          <div class="sprint-info">
+            <div class="sprint-title">2 Years Supervised Experience</div>
+            <div class="sprint-time">Months 1–24 · Runs parallel to all exam sprints</div>
+          </div>
+          <div class="sprint-toggle">+</div>
+        </button>
+        <div class="sprint-body">
+          <div class="sprint-row">
+            <div class="sprint-row-label">What I Want</div>
+            <p>Accumulate the required supervised accounting experience while simultaneously building my professional network and career capital.</p>
+          </div>
+          <div class="sprint-row">
+            <div class="sprint-row-label">What It Does</div>
+            <p>NY requires 2 years of full-time experience under a licensed CPA on the 120-hour pathway. This isn't a box to check — it's the real-world MBA that transforms exam knowledge into professional judgment. It runs in parallel to your exam prep, meaning it starts now.</p>
+          </div>
+          <div class="sprint-row">
+            <div class="sprint-row-label">How to Achieve It</div>
+            <ol>
+              <li>Banana Republic / Gap Inc. — document any finance, inventory analysis, or budget-related responsibilities. Inquire about CPA supervisors within Gap Inc.'s finance team.</li>
+              <li>Actively seek accounting-adjacent roles within 12 months: internal audit, FP&amp;A analyst, or part-time engagement at a local CPA firm</li>
+              <li>Keep a detailed Experience Log (BuJo spread): dates, duties performed, skills applied — GAAP, GAAS, advisory, tax</li>
+              <li>Network through NYSSCPA (NY Society of CPAs) — Albany and NYC chapters both have events. A supervising CPA relationship is legally required.</li>
+              <li>Qualifying experience includes: accounting, attest, tax, management advisory, or financial advisory under direct CPA supervision</li>
+            </ol>
+          </div>
+          <div class="kiyosaki-note">💡 Financial IQ #1 &amp; #5 — Experience transforms financial information into financial wisdom. This is where knowledge becomes net worth. The clock starts today.</div>
+        </div>
+      </div>
+
+      <!-- S6 -->
+      <div class="sprint phase-licensure" id="s6">
+        <button class="sprint-header" onclick="toggleSprint('s6')">
+          <div class="sprint-meta">
+            <div class="sprint-id">SPRINT 6</div>
+            <div class="sprint-type">SHORT-TERM</div>
+          </div>
+          <div class="sprint-info">
+            <div class="sprint-title">License Application &amp; Activation</div>
+            <div class="sprint-time">Month 25–26 · Low energy, high bureaucracy</div>
+          </div>
+          <div class="sprint-toggle">+</div>
+        </button>
+        <div class="sprint-body">
+          <div class="sprint-row">
+            <div class="sprint-row-label">What I Want</div>
+            <p>Hold my New York State CPA license — the credential that unlocks every door this plan was designed to open.</p>
+          </div>
+          <div class="sprint-row">
+            <div class="sprint-row-label">What It Does</div>
+            <p>You are now legally authorized to sign financial statements, operate as a CPA, and use the credential to grow Caceres Agency, pursue real estate advisory, and access CPA-gated career paths across every industry.</p>
+          </div>
+          <div class="sprint-row">
+            <div class="sprint-row-label">How to Achieve It</div>
+            <ol>
+              <li>Submit your license application to NYSED with: all exam scores, official transcripts, and verified experience documentation signed by your supervising CPA</li>
+              <li>Pay the NY CPA license fee — check current NYSED fee schedule at op.nysed.gov for current amount</li>
+              <li>Note: NY does not require a separate ethics exam for initial licensure — this is your advantage over other states</li>
+              <li>Maintain your license: 40 hours of CPE per year, including 4 hrs of ethics CPE every 3 calendar years</li>
+              <li>Update LinkedIn, Caceres Agency materials, and this portfolio site with your CPA designation upon receipt</li>
+            </ol>
+          </div>
+          <div class="kiyosaki-note">💡 Financial IQ #2 — Protecting Your Assets and Livelihood. The license is both credential and shield. It protects your right to practice and validates every financial decision you advise on.</div>
+        </div>
+      </div>
+
+    </div><!-- /sprint-list -->
+
+    <!-- TIMELINE -->
+    <div class="timeline">
+      <div class="timeline-title">Estimated Timeline</div>
+      <div class="timeline-row">
+        <div class="timeline-time">Months 1–3</div>
+        <div class="timeline-event">FAR exam passed</div>
+      </div>
+      <div class="timeline-row">
+        <div class="timeline-time">Months 3–5</div>
+        <div class="timeline-event">AUD exam passed</div>
+      </div>
+      <div class="timeline-row">
+        <div class="timeline-time">Months 5–7</div>
+        <div class="timeline-event">REG exam passed</div>
+      </div>
+      <div class="timeline-row">
+        <div class="timeline-time">Months 7–9</div>
+        <div class="timeline-event">BAR or TCP passed → EXAM COMPLETE</div>
+      </div>
+      <div class="timeline-row">
+        <div class="timeline-time">Months 1–24</div>
+        <div class="timeline-event">Supervised experience accumulating (parallel track)</div>
+      </div>
+      <div class="timeline-row">
+        <div class="timeline-time">Month 25–26</div>
+        <div class="timeline-event">License application → CPA, Wilson Pauta Jr.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- MISSION PANEL -->
+<!-- ══════════════════════════════════════ -->
+<div class="panel" id="panel-mission">
+  <div class="container">
+
+    <div class="mission-block">
+      <div class="section-label">The Goal — In My Own Words</div>
+      <blockquote>
+        "I want to be an entrepreneur obtaining his CPA license so that I set myself up for more success by growing my Financial IQ. Industry of interest is currently Real Estate."
+      </blockquote>
+    </div>
+
+    <div class="mission-block">
+      <div class="section-label">What It Does</div>
+      <p>The CPA credential legally certifies you to sign financial statements, attest to the accuracy of documents, and practice public accounting. In practical terms, it unlocks higher earnings, professional credibility, and career optionality across real estate, entrepreneurship, and finance — the three pillars your long-term vision rests on.</p>
+    </div>
+
+    <div class="mission-block">
+      <div class="section-label">The Kiyosaki Connection — 5 Financial IQs</div>
+      <p style="margin-bottom:16px; color:var(--muted); font-family:'Space Mono',monospace; font-size:13px; line-height:1.7;">
+        Financial IQ is not about memorizing tax law — it's about understanding money's language. The CPA credential gives you mastery across all five of Kiyosaki's Financial IQ pillars simultaneously.
+      </p>
+      <div class="kiyosaki-grid">
+        <div class="kiyosaki-row">
+          <div class="kiyosaki-num">#1</div>
+          <div>
+            <div class="kiyosaki-title">Making More Money</div>
+            <div class="kiyosaki-desc">CPA credential raises your earnings ceiling in any role, venture, or advisory capacity</div>
+          </div>
+        </div>
+        <div class="kiyosaki-row">
+          <div class="kiyosaki-num">#2</div>
+          <div>
+            <div class="kiyosaki-title">Protecting Your Money</div>
+            <div class="kiyosaki-desc">Audit &amp; attest knowledge protects your assets, business structures, and client relationships</div>
+          </div>
+        </div>
+        <div class="kiyosaki-row">
+          <div class="kiyosaki-num">#3</div>
+          <div>
+            <div class="kiyosaki-title">Budgeting Money</div>
+            <div class="kiyosaki-desc">FAR and REG give full mastery over cash flow management and tax planning</div>
+          </div>
+        </div>
+        <div class="kiyosaki-row">
+          <div class="kiyosaki-num">#4</div>
+          <div>
+            <div class="kiyosaki-title">Leveraging Money</div>
+            <div class="kiyosaki-desc">Understand how to structure deals, entities, and debt in ways that accelerate wealth</div>
+          </div>
+        </div>
+        <div class="kiyosaki-row">
+          <div class="kiyosaki-num">#5</div>
+          <div>
+            <div class="kiyosaki-title">Improving Your Financial Information</div>
+            <div class="kiyosaki-desc">CPAs have access to the most accurate, verified financial intelligence available</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- PATHWAY PANEL -->
+<!-- ══════════════════════════════════════ -->
+<div class="panel" id="panel-pathway">
+  <div class="container">
+
+    <div class="section-label">Your NY CPA Pathway — 120-Hour Track</div>
+
+    <div class="pathway-note">
+      You hold a bachelor's from UAlbany Massry School of Business (AACSB-accredited). Your degree satisfies the 120-credit-hour education requirement to sit for the exam. Under the 120-hour track, you need <strong>2 years of supervised experience</strong> for licensure — that clock runs in parallel to your exam prep starting today.
+    </div>
+
+    <div class="step-list">
+      <div class="step done">
+        <div class="step-num">01</div>
+        <div>
+          <div class="step-title">Education ✓</div>
+          <div class="step-detail">120+ semester hours from AACSB-accredited institution. UAlbany Massry School qualifies. Complete.</div>
+        </div>
+      </div>
+      <div class="step active">
+        <div class="step-num">02</div>
+        <div>
+          <div class="step-title">NASBA Registration</div>
+          <div class="step-detail">Create CPA Central account at nasba.org. Submit application to NY State Board via NYSED (op.nysed.gov). Upload official transcripts for credit evaluation.</div>
+        </div>
+      </div>
+      <div class="step active">
+        <div class="step-num">03</div>
+        <div>
+          <div class="step-title">CPA Exam — 4 Sections</div>
+          <div class="step-detail">3 Core sections (AUD, FAR, REG) + 1 Discipline (BAR, ISC, or TCP). All scored 0–99. Minimum passing score: 75. 30-month rolling window to complete all 4 once the first is passed.</div>
+        </div>
+      </div>
+      <div class="step pending">
+        <div class="step-num">04</div>
+        <div>
+          <div class="step-title">Supervised Experience</div>
+          <div class="step-detail">2 years full-time under a licensed CPA (120-hr track). Must involve accounting, attest, tax, or advisory services. Begins accumulating now — runs parallel to exam prep.</div>
+        </div>
+      </div>
+      <div class="step pending">
+        <div class="step-num">05</div>
+        <div>
+          <div class="step-title">License Application</div>
+          <div class="step-detail">Submit to NYSED with exam scores, official transcripts, and CPA-verified experience documentation. Must be 21+ (satisfied). No ethics exam required for initial NY licensure.</div>
+        </div>
+      </div>
+      <div class="step pending">
+        <div class="step-num">06</div>
+        <div>
+          <div class="step-title">License Maintenance</div>
+          <div class="step-detail">40 CPE hours per year. 4 hours ethics CPE every 3 calendar years. No NY residency requirement — compatible with dual NY/Ecuador lifestyle.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  function switchTab(name, btn) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('panel-' + name).classList.add('active');
+  }
+
+  function toggleSprint(id) {
+    const el = document.getElementById(id);
+    el.classList.toggle('open');
+  }
+</script>
+
+</body>
+</html>
